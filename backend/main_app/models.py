@@ -11,7 +11,7 @@ class Tag(models.Model):
     color = models.CharField(
         verbose_name='Цвет в HEX', max_length=7, unique=True)
     slug = models.SlugField(
-        verbose_name='Уникальный слаг', max_length=200, unique=True)
+        verbose_name='Уникальный slug', max_length=200, unique=True)
 
     class Meta:
         verbose_name = 'Тэг'
@@ -56,7 +56,7 @@ class Recipe(models.Model):
         verbose_name='Текстовое описание')
     ingredients = models.ManyToManyField(
         Ingredient,
-        through='recipes.IngredientAmount',
+        through='main_app.IngredientAmount',
         verbose_name='Ингредиенты',
         related_name='recipes',
     )
@@ -137,6 +137,9 @@ class Cart(models.Model):
                                     name='unique_cart_user')
         ]
 
+    def __str__(self) -> str:
+        return f'У {self.user} в списке покупок {self.recipe}'
+
 
 class Favorite(models.Model):
     user = models.ForeignKey(
@@ -162,4 +165,33 @@ class Favorite(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user}'
+        return f'У {self.user} в избранном {self.recipe}'
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Подписчик',
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name='Автор',
+    )
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='unique_follow',
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user} подписан на {self.author}'

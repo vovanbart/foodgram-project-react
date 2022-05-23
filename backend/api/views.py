@@ -3,7 +3,8 @@ from django.db.models import BooleanField, Exists, OuterRef, Value
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
-from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag
+from main_app.models import (Cart, Favorite, IngredientAmount,
+                             Ingredient, Recipe, Tag, Follow)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
@@ -15,7 +16,6 @@ from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
 from api.serializers import (FollowSerializer, IngredientSerializer,
                              RecipeReadSerializer, RecipeWriteSerializer,
                              ShortRecipeSerializer, TagSerializer)
-from users.models import Follow
 
 User = get_user_model()
 
@@ -161,29 +161,31 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(
         detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
-        user = get_object_or_404(User, username=request.user.username)
-        shopping_cart = user.cart.all()
+        recipes = request.user.cart.all().values('recipe_id')
+
+        ingredients = IngredientAmount.objects.filter(
+            recipe__id__in=recipes)
+
         shopping_dict = {}
-        for num in shopping_cart:
-            ingredients_queryset = num.recipe.ingredient.all()
-            for ingredient in ingredients_queryset:
-                name = ingredient.ingredients.name
-                amount = ingredient.amount
-                measurement_unit = ingredient.ingredients.measurement_unit
-                if name not in shopping_dict:
-                    shopping_dict[name] = {
-                        'measurement_unit': measurement_unit,
-                        'amount': amount}
-                else:
-                    shopping_dict[name]['amount'] = (
-                        shopping_dict[name]['amount'] + amount)
+        for ingredient in ingredients:
+            name = ingredient.ingredients.name
+            amount = ingredient.amount
+            measurement_unit = ingredient.ingredients.measurement_unit
+            if name not in shopping_dict:
+                shopping_dict[name] = {
+                    'measurement_unit': measurement_unit,
+                    'amount': amount}
+            else:
+                shopping_dict[name]['amount'] = (
+                    shopping_dict[name]['amount'] + amount)
 
         shopping_list = []
         for index, key in enumerate(shopping_dict, start=1):
             shopping_list.append(
                 f'{index}. {key} - {shopping_dict[key]["amount"]} '
                 f'{shopping_dict[key]["measurement_unit"]}\n')
-        filename = 'shopping_cart.txt'
+
         response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = f'attachment; filename={filename}'
+        response['Content-Disposition'] = ('attachment; '
+                                           'filename=shopping_list.txt')
         return response
