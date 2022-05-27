@@ -27,7 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', default='foodgram-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', default=False)
+DEBUG = os.getenv('DEBUG', default=0)
+CONTENT_TYPE = 'text/plain'
+FILENAME = ('attachment; filename=shopping_list.txt')
 
 ALLOWED_HOSTS = ['*']
 

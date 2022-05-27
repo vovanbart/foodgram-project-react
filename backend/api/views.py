@@ -10,6 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
+from foodgram.settings import CONTENT_TYPE, FILENAME
 from api.filters import IngredientSearchFilter, TagFavoritShopingFilter
 from api.pagination import LimitPageNumberPagination
 from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
@@ -38,7 +39,7 @@ class FollowViewSet(UserViewSet):
     pagination_class = LimitPageNumberPagination
 
     @action(
-        methods=['post'], detail=True, permission_classes=[IsAuthenticated])
+        methods=('post',), detail=True, permission_classes=(IsAuthenticated,))
     def subscribe(self, request, id=None):
         user = request.user
         author = get_object_or_404(User, id=id)
@@ -47,12 +48,8 @@ class FollowViewSet(UserViewSet):
             return Response({
                 'errors': 'Ошибка подписки, нельзя подписываться на себя'
             }, status=status.HTTP_400_BAD_REQUEST)
-        if Follow.objects.filter(user=user, author=author).exists():
-            return Response({
-                'errors': 'Ошибка подписки, вы уже подписаны на пользователя'
-            }, status=status.HTTP_400_BAD_REQUEST)
 
-        follow = Follow.objects.create(user=user, author=author)
+        follow = Follow.objects.get_or_create(user=user, author=author)
         serializer = FollowSerializer(
             follow, context={'request': request}
         )
@@ -74,7 +71,7 @@ class FollowViewSet(UserViewSet):
         follow.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=False, permission_classes=[IsAuthenticated])
+    @action(detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
         user = request.user
         queryset = Follow.objects.filter(user=user)
@@ -91,7 +88,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     pagination_class = LimitPageNumberPagination
     filter_class = TagFavoritShopingFilter
-    permission_classes = [AdminUserOrReadOnly]
+    permission_classes = (AdminUserOrReadOnly,)
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -121,8 +118,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             )
         return queryset
 
-    @action(detail=True, methods=['post'],
-            permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=('post',),
+            permission_classes=(IsAuthenticated,))
     def favorite(self, request, pk=None):
         return self.add_obj(Favorite, request.user, pk)
 
@@ -130,8 +127,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def del_from_favorite(self, request, pk=None):
         return self.delete_obj(Favorite, request.user, pk)
 
-    @action(detail=True, methods=['post'],
-            permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=('post',),
+            permission_classes=(IsAuthenticated,))
     def shopping_cart(self, request, pk=None):
         return self.add_obj(Cart, request.user, pk)
 
@@ -159,7 +156,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         }, status=status.HTTP_400_BAD_REQUEST)
 
     @action(
-        detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+        detail=False, methods=('get',), permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
         recipes = request.user.cart.all().values('recipe_id')
 
@@ -185,7 +182,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 f'{index}. {key} - {shopping_dict[key]["amount"]} '
                 f'{shopping_dict[key]["measurement_unit"]}\n')
 
-        response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = ('attachment; '
-                                           'filename=shopping_list.txt')
+        response = HttpResponse(shopping_list, content_type=CONTENT_TYPE)
+        response['Content-Disposition'] = FILENAME
         return response
