@@ -10,13 +10,13 @@ from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
-from foodgram.settings import CONTENT_TYPE, FILENAME
 from api.filters import IngredientSearchFilter, TagFavoritShopingFilter
 from api.pagination import LimitPageNumberPagination
 from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
 from api.serializers import (FollowSerializer, IngredientSerializer,
                              RecipeReadSerializer, RecipeWriteSerializer,
                              ShortRecipeSerializer, TagSerializer)
+from foodgram.settings import CONTENT_TYPE, FILENAME
 
 User = get_user_model()
 
@@ -48,6 +48,7 @@ class FollowViewSet(UserViewSet):
             return Response({
                 'errors': 'Ошибка подписки, нельзя подписываться на себя'
             }, status=status.HTTP_400_BAD_REQUEST)
+
 
         follow = Follow.objects.get_or_create(user=user, author=author)
         serializer = FollowSerializer(
@@ -183,5 +184,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 f'{shopping_dict[key]["measurement_unit"]}\n')
 
         response = HttpResponse(shopping_list, content_type=CONTENT_TYPE)
-        response['Content-Disposition'] = FILENAME
+        response['Content-Disposition'] = ('attachment; '
+                                           'filename=' + FILENAME)
         return response

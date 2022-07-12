@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
+CONTENT_TYPE='text/plain'
+FILENAME='shopping_list.txt'
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -27,9 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', default='foodgram-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', default=0)
-CONTENT_TYPE = 'text/plain'
-FILENAME = ('attachment; filename=shopping_list.txt')
+DEBUG = bool(os.getenv('DEBUG', default=0))
 
 ALLOWED_HOSTS = ['*']
 
@@ -95,6 +96,8 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
         'HOST': os.getenv('DB_HOST', default='db'),
         'PORT': os.getenv('DB_PORT', default='5432')
+        #'ENGINE': 'django.db.backends.sqlite3', 
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 

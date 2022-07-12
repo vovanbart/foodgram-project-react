@@ -5,7 +5,8 @@ from .models import (Cart,
                      Ingredient,
                      IngredientAmount,
                      Recipe,
-                     Tag, Follow)
+                     Tag,
+                     Follow, )
 
 
 class IngredientInline(TabularInline):

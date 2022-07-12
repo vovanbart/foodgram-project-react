@@ -1,13 +1,21 @@
 version: '3.8'
+# имена и описания контейнеров, которые должны быть развёрнуты
 services:
   db:
     image: postgres:13.3-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    # environment:
+    #   DB_NAME: ${DB_NAME}
+    #   DB_HOST: ${DB_HOST}
+    #   POSTGRES_USER: ${POSTGRES_USER}
+    #   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
+      # - .env
        - ./.env 
 
   backend:
+    # image: vovanbart/foodgram_backend:latest
     build: ../backend
     restart: always
     volumes:
@@ -18,9 +26,11 @@ services:
     depends_on:
       - db
     env_file:
+      # - .env
       - ./.env
 
   frontend:
+    # image: vovanbart/foodgram_frontend:latest
     build: ../frontend
     volumes:
       - ../frontend/:/app/result_build/
@@ -28,6 +38,7 @@ services:
       - backend
 
   nginx:
+    # image: nginx:1.19.3
     image: nginx:1.21.3-alpine
     ports:
       - "80:80"
