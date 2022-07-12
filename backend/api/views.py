@@ -49,7 +49,6 @@ class FollowViewSet(UserViewSet):
                 'errors': 'Ошибка подписки, нельзя подписываться на себя'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-
         follow = Follow.objects.get_or_create(user=user, author=author)
         serializer = FollowSerializer(
             follow, context={'request': request}

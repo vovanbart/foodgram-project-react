@@ -152,8 +152,8 @@ class Cart(models.Model):
         verbose_name_plural = 'В корзине'
         constraints = (
             models.UniqueConstraint(fields=('user', 'recipe',),
-                                    name='unique_cart_user')
-        ,)
+                                    name='unique_cart_user'),
+        )
 
     def __str__(self) -> str:
         return f'У {self.user} в списке покупок {self.recipe}'
@@ -181,8 +181,8 @@ class Favorite(models.Model):
         verbose_name_plural = 'Избранные'
         constraints = (
             models.UniqueConstraint(fields=('user', 'recipe',),
-                                    name='unique_user_recipe')
-        ,)
+                                    name='unique_user_recipe'),
+        )
 
     def __str__(self):
         return f'У {self.user} в избранном {self.recipe}'
@@ -212,9 +212,8 @@ class Follow(models.Model):
             models.UniqueConstraint(
                 fields=('user', 'author',),
                 name='unique_follow',
-            )
-        ,)
+            ),
+        )
 
     def __str__(self):
         return f'{self.user} подписан на {self.author}'
-
