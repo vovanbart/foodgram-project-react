@@ -1,7 +1,7 @@
 import json
 
 from django.db import transaction
-from  main_app.models import Ingredient
+from main_app.models import Ingredient
 
 json_file_path = ('./data/ingredients.json')
 

@@ -123,8 +123,8 @@ class IngredientAmount(models.Model):
         verbose_name_plural = 'Количество ингридиентов'
         constraints = (
             models.UniqueConstraint(fields=('recipe', 'ingredients',),
-                                    name='unique_ingredients_recipe')
-        ,)
+                                    name='unique_ingredients_recipe'),
+        )
 
     def __str__(self) -> str:
         return f'{self.ingredients.name} - {self.amount}'
