@@ -32,7 +32,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='foodgram-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*',
+                 '158.160.5.232']
 
 
 # Application definition

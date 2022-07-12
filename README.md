@@ -11,8 +11,8 @@
 
 ### Доступ в админ панель
 ```
-- Username: 
-- Password: 
+- Username: vovanbart
+- Password: 0000
 ```
 
 ## Запуск проекта
