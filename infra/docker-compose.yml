@@ -5,18 +5,18 @@ services:
     image: postgres:13.3-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    # environment:
-    #   DB_NAME: ${DB_NAME}
-    #   DB_HOST: ${DB_HOST}
-    #   POSTGRES_USER: ${POSTGRES_USER}
-    #   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
-      # - .env
-       - ./.env 
+       - .env
+      # - ./.env 
 
   backend:
-    # image: vovanbart/foodgram_backend:latest
-    build: ../backend
+    image: vovanbart/foodgram_backend:latest
+    # build: ../backend
     restart: always
     volumes:
       - static_value:/app/static/
@@ -26,20 +26,20 @@ services:
     depends_on:
       - db
     env_file:
-      # - .env
-      - ./.env
+      - .env
+      # - ./.env
 
   frontend:
-    # image: vovanbart/foodgram_frontend:latest
-    build: ../frontend
+    image: vovanbart/foodgram_frontend:latest
+    # build: ../frontend
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
       - backend
 
   nginx:
-    # image: nginx:1.19.3
-    image: nginx:1.21.3-alpine
+    image: nginx:1.19.3
+    # image: nginx:1.21.3-alpine
     ports:
       - "80:80"
     volumes:
