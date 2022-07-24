@@ -43,7 +43,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/nginx/default.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/home/frontend/build/
       - ./docs/:/home/frontend/build/api/docs/
       - static_value:/var/html/static/
