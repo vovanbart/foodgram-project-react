@@ -44,8 +44,8 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/nginx/default.conf
-      - ../frontend/build:/usr/share/nginx/html/
-      - ./docs/:/usr/share/nginx/html/api/docs/
+      - ../frontend/build:/home/frontend/build/
+      - ./docs/:/home/frontend/build/api/docs/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     depends_on:
