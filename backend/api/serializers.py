@@ -180,9 +180,9 @@ class FollowSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='following.username')
     first_name = serializers.ReadOnlyField(source='following.first_name')
     last_name = serializers.ReadOnlyField(source='following.last_name')
-    is_subscribed = serializers.SerializerMethodField()
-    recipes = serializers.SerializerMethodField(method_name='get_recipes')
-    recipes_count = serializers.SerializerMethodField(method_name='get_recipes_count')
+    # is_subscribed = serializers.SerializerMethodField()
+    # recipes = serializers.SerializerMethodField(method_name='get_recipes')
+    # recipes_count = serializers.SerializerMethodField(method_name='get_recipes_count')
 
     class Meta:
         model = Follow
