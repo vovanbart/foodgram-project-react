@@ -116,12 +116,12 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
         ingredients_set = set()
-        if type(ingredient.get('amount')) == str:
+        for ingredient in ingredients:
+            if type(ingredient.get('amount')) == str:
                 if not ingredient.get('amount').isdigit():
                     raise serializers.ValidationError(
                         ('Количество ингредиента должно быть числом')
                     )
-        for ingredient in ingredients:
             if int(ingredient.get('amount')) <= 0:
                 raise serializers.ValidationError(
                     ('Минимальное количество ингридиентов 1')
