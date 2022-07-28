@@ -59,5 +59,9 @@ class FavoriteAdmin(ModelAdmin):
 class CartAdmin(ModelAdmin):
     list_display = ('user', 'recipe')
 
-    def print(self, obj):
-        print(obj)
+    def tags(self, obj):
+        qs = obj.list_tags()
+        if qs:
+            return list(qs)
+        else:
+            return None
