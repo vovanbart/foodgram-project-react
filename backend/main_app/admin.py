@@ -58,5 +58,6 @@ class FavoriteAdmin(ModelAdmin):
 @register(Cart)
 class CartAdmin(ModelAdmin):
     list_display = ('user', 'recipe')
+    
     def print(self, obj):
         print(obj)
