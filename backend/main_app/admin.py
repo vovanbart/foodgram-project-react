@@ -57,9 +57,10 @@ class FavoriteAdmin(ModelAdmin):
 
 @register(Cart)
 class CartAdmin(ModelAdmin):
-    list_display = ('user', 'recipe')
+    list_display = ('user', 'recipe', 'get_tags',)
+    list_filter = ('tags',)
 
-    def tags(self, obj):
+    def get_tags(self, obj):
         qs = obj.list_tags()
         if qs:
             return list(qs)
