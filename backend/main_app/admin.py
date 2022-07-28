@@ -58,4 +58,4 @@ class FavoriteAdmin(ModelAdmin):
 @register(Cart)
 class CartAdmin(ModelAdmin):
     list_display = ('user', 'recipe')
-    list_filter = ('tag',)
+    list_filter = ('recipe.tag',)
