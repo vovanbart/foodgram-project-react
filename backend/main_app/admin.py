@@ -1,4 +1,4 @@
-from django.contrib.admin import ModelAdmin, TabularInline, register
+from django.contrib.admin import ModelAdmin, TabularInline, register, display
 
 from .models import (Cart,
                      Favorite,
@@ -58,8 +58,9 @@ class FavoriteAdmin(ModelAdmin):
 @register(Cart)
 class CartAdmin(ModelAdmin):
     list_display = ('user', 'recipe', 'get_tags',)
-    list_filter = ('get_tags',)
+    list_filter = ('tags',)
 
+    @display(description=_('Теги'))
     def get_tags(self, obj):
         qs = obj.list_tags()
         if qs:
