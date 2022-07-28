@@ -62,4 +62,5 @@ class CartAdmin(ModelAdmin):
     search_fields = ('user__username',)
     list_filter = ('recipe__tags__name',)
 
-admin.site.register(Cart, CartAdmin) 
+
+admin.site.register(Cart, CartAdmin)
