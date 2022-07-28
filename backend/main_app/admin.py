@@ -58,4 +58,5 @@ class FavoriteAdmin(ModelAdmin):
 @register(Cart)
 class CartAdmin(ModelAdmin):
     list_display = ('user', 'recipe')
-    list_filter = ('recipe.tag',)
+    def print(self, obj):
+        print(obj)
