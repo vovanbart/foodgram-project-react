@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 class CustomUserAdmin(UserAdmin):
     list_display = ['email', 'username', ]
-    list_filter = ['email', 'username', ]
 
 
 admin.site.unregister(User)
