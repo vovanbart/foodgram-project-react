@@ -24,6 +24,7 @@ class IngredientAdmin(ModelAdmin):
     search_fields = ('name',)
     list_filter = ('measurement_unit')
 
+
 @register(Recipe)
 class RecipeAdmin(ModelAdmin):
     inlines = [IngredientInline]
