@@ -22,13 +22,13 @@ class TagAdmin(ModelAdmin):
 class IngredientAdmin(ModelAdmin):
     list_display = ('name', 'measurement_unit')
     search_fields = ('name',)
-
+    list_filter = ('measurement_unit')
 
 @register(Recipe)
 class RecipeAdmin(ModelAdmin):
     inlines = [IngredientInline]
     list_display = ('name', 'author')
-    list_filter = ('author', 'name', 'tags')
+    list_filter = ('tags',)
     readonly_fields = ('count_favorites',)
 
     def count_favorites(self, obj):
