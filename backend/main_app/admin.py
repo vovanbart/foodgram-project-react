@@ -60,7 +60,7 @@ class CartAdmin(ModelAdmin):
     list_display = ('user', 'recipe', 'get_tags',)
     list_filter = ('tags',)
 
-    @display(description=_('Теги'))
+    @display(description=('Теги'))
     def get_tags(self, obj):
         qs = obj.list_tags()
         if qs:
