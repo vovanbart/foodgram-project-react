@@ -1,4 +1,5 @@
 from django.contrib.admin import ModelAdmin, TabularInline, register
+from django.contrib import admin
 
 from .models import (Cart,
                      Favorite,
@@ -56,8 +57,9 @@ class FavoriteAdmin(ModelAdmin):
     list_display = ('user', 'recipe')
 
 
-@register(Cart)
 class CartAdmin(ModelAdmin):
     list_display = ('user', 'recipe')
     search_fields = ('user__username',)
     list_filter = ('recipe__tags__name',)
+
+admin.site.register(Cart, CartAdmin) 
